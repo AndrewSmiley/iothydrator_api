@@ -1,0 +1,10 @@
+<h2>Login</h2>
+<form method="post" action="{% url "authenticate" %}">{% csrf_token %}
+    <sup style="color: #ff0000"><sup>{{ login_error }}</sup></sup>
+
+    <div class="forminputcontainer row" data-placeholder="Username"><input type="text" name="username" required
+                                                                           placeholder="Username"></div>
+    <div class="forminputcontainer row" data-placeholder="Password"><input type="password" name="password"
+                                                                           placeholder="Password" required></div>
+    <div class="row"><input type="submit" value="Login" class="btn btn-default"></div>
+</form>

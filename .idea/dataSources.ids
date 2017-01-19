@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="dataSourceStorage">
+  <data-source name="Sqlite (Xerial) - storage.db" uuid="97cb3624-537e-4239-99f6-3c3b2dbe4447">
+    <database-info product="SQLite" version="3.6.14.2" jdbc-version="2.1" driver-name="SQLiteJDBC" driver-version="native"/>
+    <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed"/>
+    <schema name="" catalog=""/>
+    <table name="AUTH_GROUP" schema="" catalog="" type="TABLE"/>
+    <table name="AUTH_GROUP_PERMISSIONS" schema="" catalog="" type="TABLE"/>
+    <table name="AUTH_PERMISSION" schema="" catalog="" type="TABLE"/>
+    <table name="AUTH_USER" schema="" catalog="" type="TABLE"/>
+    <table name="AUTH_USER_GROUPS" schema="" catalog="" type="TABLE"/>
+    <table name="AUTH_USER_USER_PERMISSIONS" schema="" catalog="" type="TABLE"/>
+    <table name="DJANGO_ADMIN_LOG" schema="" catalog="" type="TABLE"/>
+    <table name="DJANGO_CONTENT_TYPE" schema="" catalog="" type="TABLE"/>
+    <table name="DJANGO_MIGRATIONS" schema="" catalog="" type="TABLE"/>
+    <table name="DJANGO_SESSION" schema="" catalog="" type="TABLE"/>
+    <table name="GENERIC_DJANGO_PROJECT_CARS" schema="" catalog="" type="TABLE"/>
+    <table name="SQLITE_SEQUENCE" schema="" catalog="" type="TABLE"/>
+  </data-source>
+</component>
