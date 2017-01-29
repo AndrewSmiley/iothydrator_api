@@ -36,7 +36,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'keg_api'
+    'keg_api',
+    'predix'
 )
 
 MIDDLEWARE_CLASSES = (

@@ -1,0 +1,14 @@
+{
+  "dht_sensors": [
+    [
+      {
+        "port": 7,
+        "type": 1
+      }
+    ]
+  ],
+  "solenoid_gpio":18,
+  "ss_port":1
+
+
+}

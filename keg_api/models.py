@@ -16,4 +16,5 @@ class Pour(models.Model):
     volume = models.IntegerField()
     user = models.ForeignKey(User)
     status = models.ForeignKey(Status)
+    predix_status =models.BooleanField(default=False)
 

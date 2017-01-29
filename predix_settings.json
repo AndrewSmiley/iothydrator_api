@@ -1,0 +1,8 @@
+{
+  "uaa_uri": "https://23b8155d-f40c-4faf-8802-d31dd864a7d1.predix-uaa.run.aws-usw02-pr.ice.predix.io",
+  "uaa_client": "keg",
+  "uaa_password":"gecloud",
+  "ingest_wss": "wss://gateway-predix-data-services.run.aws-usw02-pr.ice.predix.io/v1/stream/messages",
+  "ingest_zone":"6d5bf730-0eaa-4785-a2b4-c3bfe710d93a",
+  "query_uri":"https://time-series-store-predix.run.aws-usw02-pr.ice.predix.io/v1/datapoints"
+}
