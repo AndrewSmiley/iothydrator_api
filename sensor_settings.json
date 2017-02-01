@@ -8,7 +8,7 @@
     ]
   ],
   "solenoid_gpio":18,
-  "ss_port":1
+  "ss_port":0
 
 
 }
