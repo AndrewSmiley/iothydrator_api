@@ -1,0 +1,4 @@
+In Progress, 400
+Complete, 200
+Error, 300
+Stopped, 350

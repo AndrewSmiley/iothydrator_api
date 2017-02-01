@@ -10,21 +10,22 @@ def index(request):
     return render(request, 'index.html', {'test': "my data"})
 
 def start_pour(request, volume=1, user_id=1):
-    pour = Pour()
-    pour.volume = volume
-    pour.user = User.objects.get(id=1)
-    pour.date= str((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds() * 1000)
-    pour.status = Status.objects.get(description="In Progress")
-    pour.save()
+    # pour = Pour()
+    # pour.volume = volume
+    # pour.user = User.objects.get(id=1)
+    # pour.date= str((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds() * 1000)
+    # pour.status = Status.objects.get(description="In Progress")
+    # pour.save()
 
-    return HttpResponse(json.dumps({"result":True, "pour_id":pour.id}))
+    return HttpResponse(json.dumps({"result":True, "pour_id":start_pi_pour(volume)}))
 
 
 def stop_pour(request):
-    return HttpResponse(json.dumps({"result":True}))
+    return HttpResponse(json.dumps({"result":stop_pi_pour()}))
 
 def pour_status(request, pour_id=1):
-    return HttpResponse(json.dumps({"result":True, "percentage":5, "status":"Completed", "volume_expected":32, "volume_poured":"30"}))
+    p = Pour.objects.get(id=int(pour_id))
+    return HttpResponse(json.dumps({"result":True, "percentage":get_pour_percentage(pour_id), "status":p.status.description, "volume_expected":p.volume, "volume_poured":p.actual_volume}))
 
 def authenticate(request, sso=''):
     if User.objects.filter(sso=sso).count() != 0:
@@ -49,12 +50,13 @@ def system_info(request):
 
 def pour_history(request):
     pours=[]
-    for i in range(1, 3):
-        pours.append({"pour_id":i, "status":"Completed", "user_id":i, "timestamp":"123456783", "volume": 32,"user_full_name":"%s %s"%(User.objects.get(id=i).first_name,User.objects.get(id=i).last_name)})
+    for p in Pour.objects.all():
+        pours.append({"pour_id":p.id, "status":"Completed", "user_id":p.user.id, "timestamp":p.date, "volume": p.actual_volume,"user_full_name":"%s %s"%(p.user.first_name,p.user.last_name)})
     return HttpResponse(json.dumps({"result":True, "pours":pours}))
 
 def user_info(request, user_id=1):
-    return HttpResponse(json.dumps({"result": True, "sso": "212543871", "first_name":"Andrew", "last_name":"Smiley"}))
+    user = User.objects.get(id=user_id)
+    return HttpResponse(json.dumps({"result": True, "sso": user.sso, "first_name":user.first_name, "last_name":user.last_name}))
 
 def user_photo(request, user_id=1):
     # https://f4.bcbits.com/img/0003428886_10.jpg

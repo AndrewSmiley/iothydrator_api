@@ -17,6 +17,7 @@ class Pour(models.Model):
     user = models.ForeignKey(User)
     status = models.ForeignKey(Status)
     predix_status =models.BooleanField(default=False)
+    actual_volume=models.FloatField(default=0.0)
 
     def __str__(self):
         return str(self.id)

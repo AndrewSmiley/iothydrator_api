@@ -1,0 +1,4 @@
+Django==1.7
+olefile==0.44
+wheel==0.24.0
+
