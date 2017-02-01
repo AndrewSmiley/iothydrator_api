@@ -1,16 +1,24 @@
 __author__ = 'pridemai'
 from django.shortcuts import render, render_to_response
 from django.http.response import HttpResponse
-from models import Pour, User
+from models import Pour, User, Status
 from util import *
 # import Image
 import json
-
+import datetime
 def index(request):
     return render(request, 'index.html', {'test': "my data"})
 
 def start_pour(request, volume=1, user_id=1):
-    return HttpResponse(json.dumps({"result":True}))
+    pour = Pour()
+    pour.volume = volume
+    pour.user = User.objects.get(id=1)
+    pour.date= str((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds() * 1000)
+    pour.status = Status.objects.get(description="In Progress")
+    pour.save()
+
+    return HttpResponse(json.dumps({"result":True, "pour_id":pour.id}))
+
 
 def stop_pour(request):
     return HttpResponse(json.dumps({"result":True}))
