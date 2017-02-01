@@ -12,3 +12,16 @@ def get_keg_percentage():
     return 100
 def get_c02_percentage():
     return 100
+
+def get_days_to_keg_empty():
+    return 3
+
+def get_days_in_tank():
+    return 6
+
+def get_days_in_lines():
+
+    return 45
+
+def get_optimal_maintenance_range():
+    return ['6PM', "7AM"]

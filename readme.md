@@ -11,10 +11,12 @@ Begin a pour cycle. Once a pour cycle has started, it will shut off in the devic
 #####*Example Response*
 ```
 {  
-    "result": true  
+    "result": true
+    "pour_id": 1
 }  
 ```  
 **`result`**: the success of the pour
+**`pour_id`**: the id of the pour started
 
 ####*POST*
 **`/v1/stop_pour/`**  
@@ -113,11 +115,13 @@ Fetch the pour history
 		"status": "Completed",
 		"timestamp": "123456783",
 		"user_id": 1,
+		"user_full_name":"Andrew Smiley",
 		"pour_id": 1
 	}, {
 		"status": "Completed",
 		"timestamp": "123456783",
 		"user_id": 2,
+		"user_full_name":"Andrew Smiley",
 		"pour_id": 2
 	}],
 	"result": true
@@ -125,7 +129,7 @@ Fetch the pour history
 ```
 
 **`result`**: the success of fetch  
-**`pours`**: a list of pours and their status, timestamp, user_id and volume
+**`pours`**: a list of pours and their status, timestamp, user_id, full name and volume
 
 ####*POST*
 **`/v1/user_photo/<user_id>`**  
@@ -163,13 +167,42 @@ Fetch the specified user information based upon id passed
 **`sso`**: the sso of the user
 
 
+####*POST*
+**`/v1/dt/overview/`**  
+Fetch the Digital Twin information as JSON
+
+#####*Example Response*
+```
+{
+	"days_in_lines": 45,
+	"days_in_keg": 3,
+	"result": "true",
+	"days_in_c02": 6
+}
+```
+**`result`**: the success of the digital twin data generation  
+**`days_in_lines`**: the number of days remaining until we need to replace the lines  
+**`days_in_keg`**: the number of days remaining until we need to replace the keg  
+**`days_in_c02`**: the number of days remaining until we need to replace the c02
+
+
+####*POST*
+**`/v1/dt/omt/`**  
+Fetch the Digital Twin information as JSON
+
+#####*Example Response*
+```
+{
+	"omt_start": "6PM",
+	"result": "true",
+	"omt_end": "7AM"
+}
+```
+**`result`**: the success of the digital twin optimal maintenance time range  
+**`omt_start`**: the start of the optimal maintenance range  
+**`omt_end`**: the end of the optimal maintenance range
 
 
 
 
 
-
-
-
-# Keg-api
-# Keg-api

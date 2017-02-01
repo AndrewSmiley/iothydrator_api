@@ -18,3 +18,12 @@ class Pour(models.Model):
     status = models.ForeignKey(Status)
     predix_status =models.BooleanField(default=False)
 
+    def __str__(self):
+        return str(self.id)
+
+class Part(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.CharField(max_length=500)
+    date_added  = models.CharField(max_length=50, default=str((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds() * 1000))
+    cost = models.FloatField(default=0.0)
+    part_code = models.IntegerField(default=1)

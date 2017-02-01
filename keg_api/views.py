@@ -50,7 +50,7 @@ def system_info(request):
 def pour_history(request):
     pours=[]
     for i in range(1, 3):
-        pours.append({"pour_id":i, "status":"Completed", "user_id":i, "timestamp":"123456783", "volume": 32})
+        pours.append({"pour_id":i, "status":"Completed", "user_id":i, "timestamp":"123456783", "volume": 32,"user_full_name":"%s %s"%(User.objects.get(id=i).first_name,User.objects.get(id=i).last_name)})
     return HttpResponse(json.dumps({"result":True, "pours":pours}))
 
 def user_info(request, user_id=1):
@@ -60,7 +60,9 @@ def user_photo(request, user_id=1):
     # https://f4.bcbits.com/img/0003428886_10.jpg
     image_data = open("rumham.jpg", "rb").read()
     return HttpResponse(image_data, content_type="image/png")
+def dt_overview(request):
+    return HttpResponse(json.dumps({"result":"true","days_in_keg":get_days_to_keg_empty(), "days_in_c02":get_days_in_tank(), "days_in_lines":get_days_in_lines()}))
 
-    # file = cStringIO.StringIO(urllib.urlopen(URL).read())
-    # img = Image.open(file)
-    # return HttpResponse(image_data, mimetype="image/png")
+def dt_optimal_maintenance_time(request):
+    omt_range= get_optimal_maintenance_range()
+    return HttpResponse(json.dumps({"result":"true", "omt_start":omt_range[0], "omt_end":omt_range[-1]}))

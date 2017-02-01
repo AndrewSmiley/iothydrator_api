@@ -14,6 +14,8 @@ urlpatterns = patterns('',
     url(r'^v1/pour_history/', 'keg_api.views.pour_history', name="pour_history"),
     url(r'^v1/user_info/(?P<user_id>\d+)/$', 'keg_api.views.user_info', name="user_info"),
     url(r'^v1/user_photo/(?P<user_id>\d+)/$', 'keg_api.views.user_photo', name="user_photo"),
+    url(r'^v1/dt/overview/', 'keg_api.views.dt_overview', name="dt_overview"),
+    url(r'^v1/dt/omt/', 'keg_api.views.dt_optimal_maintenance_time', name="dt_optimal_maintenance_time"),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 )

@@ -4,3 +4,4 @@ from models import *
 admin.site.register(User)
 admin.site.register(Pour)
 admin.site.register(Status)
+admin.site.register(Part)
