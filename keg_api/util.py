@@ -27,11 +27,15 @@ def ounces_to_ml(oz):
     return oz/ ml_per_oz
 def ml_to_ounces(ml):
     return ml * ml_per_oz
-def run_pour(pour_id):
+
+
+def run_pour(pour_id, volume):
     pour=Pour.objects.get(id=pour_id)
+    clicks =0
+
     try:
         GPIO.output(18, GPIO.LOW)
-        while clicks*2.25 < ounces_to_ml(volume):
+        while clicks *2.25 < ounces_to_ml(volume):
             pour.actual_volume = ml_to_ounces(clicks*2.25)
             pour.save()
         pour.status = Status.objects.get(description="Complete")
