@@ -6,6 +6,7 @@ import RPi.GPIO as GPIO
 import threading
 clicks = 0
 ml_per_oz=0.0338140225589
+
 _flowmeter_gpio_pin=23
 # 18=18
 
@@ -24,7 +25,7 @@ dht_sensor_type = 1
 
 
 def ounces_to_ml(oz):
-    return float(oz)/ ml_per_oz
+    return float(oz)* 29.5735296
 def ml_to_ounces(ml):
     return float(ml)* ml_per_oz
 
@@ -35,6 +36,7 @@ def run_pour(pour_id, volume):
 
     try:
         GPIO.output(18, GPIO.LOW)
+        print
         while clicks *2.25 < ounces_to_ml(volume):
             pour.actual_volume = ml_to_ounces(clicks*2.25)
             pour.save()
