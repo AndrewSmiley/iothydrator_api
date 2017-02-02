@@ -12,7 +12,7 @@ def click_incrementer(channel):
     global clicks
     clicks = clicks + 1
 
-
+GPIO.setmode(GPIO.BCM)
 GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(18, GPIO.OUT)
 GPIO.add_event_detect(23, GPIO.FALLING, callback=click_incrementer)
