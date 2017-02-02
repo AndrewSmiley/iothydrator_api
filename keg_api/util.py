@@ -51,6 +51,7 @@ def start_pi_pour(volume):
     pour.user = User.objects.get(id=1)
     pour.date= str((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds() * 1000)
     pour.status = Status.objects.get(description="In Progress")
+    pour.keg = Keg.objects.last()
     pour.save()
 
     p = Process(target=run_pour, args=(pour.id))
