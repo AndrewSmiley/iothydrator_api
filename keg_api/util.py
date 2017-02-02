@@ -38,6 +38,8 @@ def run_pour(pour_id):
         pour.save()
         clicks=0 #reset clicks to 0
     except:
+        import traceback
+        traceback.print_exc()
         clicks=0
         pour.status = Status.objects.get(description="Error")
         pour.actual_volume = ml_to_ounces(clicks*2.25)
