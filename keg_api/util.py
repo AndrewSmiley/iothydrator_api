@@ -6,16 +6,16 @@ from multiprocessing import Process
 clicks = 0
 ml_per_oz=0.0338140225589
 _flowmeter_gpio_pin=23
-_solenoid_gpio_pin=18
+# 18=18
 
 def click_incrementer(channel):
     global clicks
     clicks = clicks + 1
 
 
-GPIO.setup(_flowmeter_gpio_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(_solenoid_gpio_pin, GPIO.OUT)
-GPIO.add_event_detect(_flowmeter_gpio_pin, GPIO.FALLING, callback=click_incrementer)
+GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(18, GPIO.OUT)
+GPIO.add_event_detect(23, GPIO.FALLING, callback=click_incrementer)
 GPIO.setmode(GPIO.BCM)
 
 dht_sensor_port = 7
@@ -29,7 +29,7 @@ def ml_to_ounces(ml):
 def run_pour(pour_id):
     pour=Pour.objects.get(id=pour_id)
     try:
-        GPIO.output(_solenoid_gpio_pin, GPIO.LOW)
+        GPIO.output(18, GPIO.LOW)
         while clicks*2.25 < ounces_to_ml(volume):
             pour.actual_volume = ml_to_ounces(clicks*2.25)
             pour.save()
@@ -42,7 +42,7 @@ def run_pour(pour_id):
         pour.actual_volume = ml_to_ounces(clicks*2.25)
         pour.save()
         pass
-    GPIO.output(_solenoid_gpio_pin, GPIO.HIGH)
+    GPIO.output(18, GPIO.HIGH)
 
 def start_pi_pour(volume):
     pour = Pour()
@@ -59,7 +59,7 @@ def start_pi_pour(volume):
     return pour.id
 def stop_pi_pour():
     try:
-        GPIO.output(_solenoid_gpio_pin, GPIO.HIGH)
+        GPIO.output(18, GPIO.HIGH)
         pour = Pour.objects.last()
         pour.status = Status.objects.get(description="Stopped")
         pour.save()
