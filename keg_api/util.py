@@ -61,7 +61,7 @@ def start_pi_pour(volume):
     pour.keg = Keg.objects.last()
     pour.save()
     #fuck tuples
-    t = threading.Thread(target=run_pour, args=(pour.id,))
+    t = threading.Thread(target=run_pour, args=(pour.id,volume))
     t.start()
     # p = Process(target=run_pour, args=(pour.id,))
     # p.start()
