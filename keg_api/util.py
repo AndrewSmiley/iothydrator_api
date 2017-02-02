@@ -48,10 +48,10 @@ def start_pi_pour(volume):
     pour = Pour()
     pour.volume = volume
     pour.actual_volume = 0.0
-    pour.user = User.objects.last()
+    pour.user = User.objects.latest()
     pour.date= str((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds() * 1000)
     pour.status = Status.objects.get(description="In Progress")
-    pour.keg = Keg.objects.last()
+    pour.keg = Keg.objects.latest()
     pour.save()
 
     p = Process(target=run_pour, args=(pour.id))
@@ -61,7 +61,7 @@ def start_pi_pour(volume):
 def stop_pi_pour():
     try:
         GPIO.output(18, GPIO.HIGH)
-        pour = Pour.objects.last()
+        pour = Pour.objects.latest()
         pour.status = Status.objects.get(description="Stopped")
         pour.save()
         return True
@@ -87,12 +87,12 @@ def get_pressure_sensor_status():
     return {"ps0":True, "ps1":True, "ps2":True}
 def get_keg_percentage():
     total_volume = 0.0
-    for p in Pour.objects.filter(keg=Keg.objects.last()):
+    for p in Pour.objects.filter(keg=Keg.objects.latest()):
         total_volume = total_volume+float(p.actual_volume)
 
 
 
-    return (float(total_volume)/float(Keg.objects.last().volume))*100
+    return (float(total_volume)/float(Keg.objects.latest().volume))*100
 
 def get_c02_percentage():
     return 80 #just going to stub this in
