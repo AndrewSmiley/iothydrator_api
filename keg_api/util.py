@@ -2,6 +2,7 @@ __author__ = 'andrewsmiley'
 from models import *
 from grovepi import *
 import RPi.GPIO as GPIO
+from multiprocessing import Process
 clicks = 0
 ml_per_oz=0.0338140225589
 _flowmeter_gpio_pin=23
@@ -25,14 +26,8 @@ def ounces_to_ml(oz):
     return oz/ ml_per_oz
 def ml_to_ounces(ml):
     return ml * ml_per_oz
-def start_pi_pour(volume):
-    pour = Pour()
-    pour.volume = volume
-    pour.actual_volume = 0.0
-    pour.user = User.objects.get(id=1)
-    pour.date= str((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds() * 1000)
-    pour.status = Status.objects.get(description="In Progress")
-    pour.save()
+def run_pour(pour_id):
+    pour=Pour.objects.get(id=pour_id)
     try:
         GPIO.output(_solenoid_gpio_pin, GPIO.LOW)
         while clicks*2.25 < ounces_to_ml(volume):
@@ -48,6 +43,18 @@ def start_pi_pour(volume):
         pour.save()
         pass
     GPIO.output(_solenoid_gpio_pin, GPIO.HIGH)
+
+def start_pi_pour(volume):
+    pour = Pour()
+    pour.volume = volume
+    pour.actual_volume = 0.0
+    pour.user = User.objects.get(id=1)
+    pour.date= str((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds() * 1000)
+    pour.status = Status.objects.get(description="In Progress")
+    pour.save()
+
+    p = Process(target=run_pour, args=(pour.id))
+    p.start()
 
     return pour.id
 def stop_pi_pour():
@@ -87,7 +94,7 @@ def get_keg_percentage():
     return (float(total_volume)/float(Keg.objects.last().volume))*100
 
 def get_c02_percentage():
-    return 100
+    return 80 #just going to stub this in
 
 def get_days_to_keg_empty():
     return 3

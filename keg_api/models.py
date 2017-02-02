@@ -29,7 +29,7 @@ class Part(models.Model):
         return self.name
 class Keg(models.Model):
     volume=models.FloatField(default=0.0)
-    contents= models.CharField(default="Liquid")
+    contents= models.CharField(default="Liquid", max_length=50)
     date = models.CharField(max_length=50, default=str((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds() * 1000))
 
     def __str__(self):
