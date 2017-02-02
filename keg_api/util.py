@@ -24,9 +24,9 @@ dht_sensor_type = 1
 
 
 def ounces_to_ml(oz):
-    return oz/ ml_per_oz
+    return float(oz)/ ml_per_oz
 def ml_to_ounces(ml):
-    return ml * ml_per_oz
+    return float(ml)* ml_per_oz
 
 
 def run_pour(pour_id, volume):
