@@ -17,7 +17,7 @@ def start_pour(request, volume=1, user_id=1):
     # pour.status = Status.objects.get(description="In Progress")
     # pour.save()
 
-    return HttpResponse(json.dumps({"result":True, "pour_id":start_pi_pour(request.post['volume'])}))
+    return HttpResponse(json.dumps({"result":True, "pour_id":start_pi_pour(volume)}))
 
 
 def stop_pour(request):
