@@ -53,8 +53,8 @@ def start_pi_pour(volume):
     pour.status = Status.objects.get(description="In Progress")
     pour.keg = Keg.objects.last()
     pour.save()
-
-    p = Process(target=run_pour, args=(pour.id))
+    #fuck tuples
+    p = Process(target=run_pour, args=(pour.id,))
     p.start()
 
     return pour.id
