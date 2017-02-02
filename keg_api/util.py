@@ -2,7 +2,8 @@ __author__ = 'andrewsmiley'
 from models import *
 from grovepi import *
 import RPi.GPIO as GPIO
-from multiprocessing import Process
+# from multiprocessing import Process
+import threading
 clicks = 0
 ml_per_oz=0.0338140225589
 _flowmeter_gpio_pin=23
@@ -54,8 +55,10 @@ def start_pi_pour(volume):
     pour.keg = Keg.objects.last()
     pour.save()
     #fuck tuples
-    p = Process(target=run_pour, args=(pour.id,))
-    p.start()
+    t = threading.Thread(target=run_pour, args=(pour.id,))
+    t.start()
+    # p = Process(target=run_pour, args=(pour.id,))
+    # p.start()
 
     return pour.id
 def stop_pi_pour():
