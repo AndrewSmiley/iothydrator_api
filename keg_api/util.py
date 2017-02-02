@@ -29,7 +29,7 @@ def ml_to_ounces(ml):
 def run_pour(pour_id):
     pour=Pour.objects.get(id=pour_id)
     try:
-        GPIO.output(18, GPIO.HIGH)
+        GPIO.output(18, GPIO.LOW)
         while clicks*2.25 < ounces_to_ml(volume):
             pour.actual_volume = ml_to_ounces(clicks*2.25)
             pour.save()
@@ -42,7 +42,7 @@ def run_pour(pour_id):
         pour.actual_volume = ml_to_ounces(clicks*2.25)
         pour.save()
         pass
-    GPIO.output(18, GPIO.LOW)
+    GPIO.output(18, GPIO.HIGH)
 
 def start_pi_pour(volume):
     pour = Pour()
@@ -60,7 +60,7 @@ def start_pi_pour(volume):
     return pour.id
 def stop_pi_pour():
     try:
-        GPIO.output(18, GPIO.LOW)
+        GPIO.output(18, GPIO.HIGH)
         pour = Pour.objects.last()
         pour.status = Status.objects.get(description="Stopped")
         pour.save()
