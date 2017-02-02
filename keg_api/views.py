@@ -25,6 +25,7 @@ def stop_pour(request):
 
 def pour_status(request, pour_id=1):
     p = Pour.objects.get(id=int(pour_id))
+    print "progress for pour #%s: %s "%(pour_id, get_pour_percentage(pour_id))
     return HttpResponse(json.dumps({"result":True, "percentage":get_pour_percentage(pour_id), "status":p.status.description, "volume_expected":p.volume, "volume_poured":p.actual_volume}))
 
 def authenticate(request, sso=''):
