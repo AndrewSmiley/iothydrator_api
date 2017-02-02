@@ -12,6 +12,7 @@ _flowmeter_gpio_pin=23
 
 def click_incrementer(channel):
     global clicks
+    print "click %s" %(clicks)
     clicks = clicks + 1
 
 GPIO.setmode(GPIO.BCM)
@@ -32,12 +33,13 @@ def ml_to_ounces(ml):
 
 def run_pour(pour_id, volume):
     pour=Pour.objects.get(id=pour_id)
-    clicks =0
+    global clicks
 
     try:
         GPIO.output(18, GPIO.LOW)
         print
         while clicks *2.25 < ounces_to_ml(volume):
+            print "ounces poured %s" %(clicks*2.25)
             pour.actual_volume = ml_to_ounces(clicks*2.25)
             pour.save()
         pour.status = Status.objects.get(description="Complete")
