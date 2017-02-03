@@ -42,7 +42,7 @@ def run_pour(pour_id, volume):
             print "ounces poured %s" %(clicks*2.25)
             pour.actual_volume = ml_to_ounces(clicks*2.25)
             pour.save()
-        pour.status = Status.objects.get(description="Complete")
+        pour.status = Status.objects.get(description="complete")
         pour.save()
         clicks=0 #reset clicks to 0
     except:
