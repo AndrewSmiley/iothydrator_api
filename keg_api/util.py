@@ -6,7 +6,7 @@ import RPi.GPIO as GPIO
 import threading
 clicks = 0
 ml_per_oz=0.0338140225589
-
+# current_pour = None
 _flowmeter_gpio_pin=23
 # 18=18
 
@@ -32,6 +32,7 @@ def ml_to_ounces(ml):
 
 
 def run_pour(pour_id, volume):
+    global current_pour
     pour=Pour.objects.get(id=pour_id)
     global clicks
 
@@ -42,6 +43,8 @@ def run_pour(pour_id, volume):
             print "ounces poured %s" %(clicks*2.25)
             pour.actual_volume = ml_to_ounces(clicks*2.25)
             pour.save()
+            if round(pour.actual_volume) >= volume:
+                break
         pour.status = Status.objects.get(description="complete")
         pour.save()
         clicks=0 #reset clicks to 0
