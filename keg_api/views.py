@@ -16,7 +16,6 @@ def start_pour(request, volume=1, user_id=1):
     # pour.date= str((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds() * 1000)
     # pour.status = Status.objects.get(description="In Progress")
     # pour.save()
-
     return HttpResponse(json.dumps({"result":True, "pour_id":start_pi_pour(volume)}))
 
 
@@ -24,7 +23,9 @@ def stop_pour(request):
     return HttpResponse(json.dumps({"result":stop_pi_pour()}))
 
 def pour_status(request, pour_id=1):
-    p = Pour.objects.get(id=int(pour_id))
+#    pour_id = Pour.objects.last().id
+    p = Pour.objects.last()#.get(id=int(pour_id))
+    pour_id=p.id
     print "progress for pour #%s: %s "%(pour_id, get_pour_percentage(pour_id))
     return HttpResponse(json.dumps({"result":True, "percentage":get_pour_percentage(pour_id), "status":p.status.description, "volume_expected":p.volume, "volume_poured":p.actual_volume}))
 

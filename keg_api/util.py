@@ -42,7 +42,7 @@ def run_pour(pour_id, volume):
             print "ounces poured %s" %(clicks*2.25)
             pour.actual_volume = ml_to_ounces(clicks*2.25)
             pour.save()
-        pour.status = Status.objects.get(description="Complete")
+        pour.status = Status.objects.get(description="complete")
         pour.save()
         clicks=0 #reset clicks to 0
     except:
@@ -83,7 +83,9 @@ def stop_pi_pour():
 
 def get_pour_percentage(pour_id):
     pour = Pour.objects.get(id=int(pour_id))
-    return float(float(pour.actual_volume)/float(pour.volume)*100.0)
+    actual_volume=int(round(pour.actual_volume))
+    res = (float(actual_volume)/float(pour.volume)*100.0)
+    return res #res+1 if res==100.0 else res #(float(actual_volume)/float(pour.volume)*100.0)
 
 def get_thermo_status():
     [temp, hum] = dht(dht_sensor_port, dht_sensor_type)
