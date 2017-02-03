@@ -83,9 +83,9 @@ def stop_pi_pour():
 
 def get_pour_percentage(pour_id):
     pour = Pour.objects.get(id=int(pour_id))
-    actual_volume=int(round(pour.actual_volume))
-    res = (float(actual_volume)/float(pour.volume)*100.0)
-    return res #res+1 if res==100.0 else res #(float(actual_volume)/float(pour.volume)*100.0)
+    # actual_volume=
+    # res = (float(actual_volume)/float(pour.volume)*100.0)
+    return (float(int(round(pour.actual_volume)))/float(pour.volume)*100.0)
 
 def get_thermo_status():
     [temp, hum] = dht(dht_sensor_port, dht_sensor_type)
