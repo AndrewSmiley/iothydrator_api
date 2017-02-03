@@ -38,7 +38,7 @@ def run_pour(pour_id, volume):
 
     try:
         GPIO.output(18, GPIO.LOW)
-        while clicks < round(ounces_to_ml(volume-1)/2.25):
+        while clicks < round(ounces_to_ml(int(volume)-1)/2.25):
             # print "ounces poured %s" %(ml_to_ounces(clicks*2.25))
             pour.actual_volume = ml_to_ounces(clicks*2.25)
             pour.save()
