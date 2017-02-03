@@ -2,6 +2,7 @@ __author__ = 'andrewsmiley'
 from models import *
 from grovepi import *
 import RPi.GPIO as GPIO
+import math
 # from multiprocessing import Process
 import threading
 clicks = 0
@@ -38,7 +39,7 @@ def run_pour(pour_id, volume):
     try:
         GPIO.output(18, GPIO.LOW)
         print
-        while clicks *2.25 < ounces_to_ml(volume):
+        while clicks < round(ounces_to_ml(volume)/2.25):
             print "ounces poured %s" %(ml_to_ounces(clicks*2.25))
             pour.actual_volume = ml_to_ounces(clicks*2.25)
             pour.save()
@@ -67,6 +68,7 @@ def start_pi_pour(volume):
     #fuck tuples
     t = threading.Thread(target=run_pour, args=(pour.id,volume))
     t.start()
+    return pour.id
     # p = Process(target=run_pour, args=(pour.id,))
     # p.start()
 def stop_pi_pour():
@@ -81,9 +83,12 @@ def stop_pi_pour():
 
 def get_pour_percentage(pour_id):
     pour = Pour.objects.get(id=int(pour_id))
-    # actual_volume=
-    # res = (float(actual_volume)/float(pour.volume)*100.0)
-    return (float(int(round(pour.actual_volume)))/float(pour.volume)*100.0)
+    res = (float(int(math.ceil(pour.actual_volume)))/float(pour.volume)*100.0)
+    if res >= 100.0:
+        GPIO.output(18, GPIO.HIGH)
+        pour.status = Status.objects.get(description="complete")
+        pour.save()
+    return res
 
 def get_thermo_status():
     [temp, hum] = dht(dht_sensor_port, dht_sensor_type)
