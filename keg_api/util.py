@@ -5,7 +5,7 @@ import RPi.GPIO as GPIO
 # from multiprocessing import Process
 import threading
 clicks = 0
-ounces_poured = 0.0
+# ounces_poured = 0.0
 ml_per_oz=0.0338140225589
 # current_pour = None
 _flowmeter_gpio_pin=23
@@ -33,22 +33,23 @@ def ml_to_ounces(ml):
 
 
 def run_pour(pour_id, volume):
-    global ounces_poured
+    # global ounces_poured
     pour=Pour.objects.get(id=pour_id)
+    ounces_poured = 0.0
     global clicks
 
     try:
         GPIO.output(18, GPIO.LOW)
-        print
+        # print
         while clicks *2.25 < ounces_to_ml(volume):
             ounces_poured = float(clicks*2.25)
-            print "ounces poured %s" %(clicks*2.25)
+            print "ounces poured %s" %(ml_to_ounces(clicks*2.25))
             # pour.actual_volume = ml_to_ounces(clicks*2.25)
             # pour.save()
         pour.actual_volume = ounces_poured
         pour.status = Status.objects.get(description="complete")
         pour.save()
-        ounces_poured = 0.0
+        # ounces_poured = 0.0
         clicks=0 #reset clicks to 0
     except:
         import traceback
