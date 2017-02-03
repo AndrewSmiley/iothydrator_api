@@ -38,7 +38,7 @@ def run_pour(pour_id, volume):
 
     try:
         GPIO.output(18, GPIO.LOW)
-        while clicks < round(ounces_to_ml(volume)/2.25):
+        while clicks < round(ounces_to_ml(volume-1)/2.25):
             # print "ounces poured %s" %(ml_to_ounces(clicks*2.25))
             pour.actual_volume = ml_to_ounces(clicks*2.25)
             pour.save()
@@ -83,7 +83,7 @@ def stop_pi_pour():
 def get_pour_percentage(pour_id):
     pour = Pour.objects.get(id=int(pour_id))
     res = (float(int(math.ceil(pour.actual_volume)))/float(pour.volume)*100.0)
-    if res >= 100.0:
+    if res >= 98:
         GPIO.output(18, GPIO.HIGH)
         pour.status = Status.objects.get(description="complete")
         pour.save()
