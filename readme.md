@@ -1,6 +1,6 @@
 ##Smart Keg API
 
-####*POST*  
+####*GET*  
 **`/v1/start_pour/<volume>/<user_id>/`**  
 Begin a pour cycle. Once a pour cycle has started, it will shut off in the device once the specified pour volume has been reached.  
 
@@ -18,7 +18,7 @@ Begin a pour cycle. Once a pour cycle has started, it will shut off in the devic
 **`result`**: the success of the pour
 **`pour_id`**: the id of the pour started
 
-####*POST*
+####*GET*
 **`/v1/stop_pour/`**  
 Stop the current pour cycle manually, i.e. close the solenoid. 
   
@@ -30,7 +30,7 @@ Stop the current pour cycle manually, i.e. close the solenoid.
 ```  
 **`result`**: the success of the stop
 
-####*POST*
+####*GET*
 **`/v1/pour_status/<pour_id>/`**  
 Get the status of the specified pour. If no pour is specified, the latest pour will be used.
 
@@ -55,7 +55,7 @@ Get the status of the specified pour. If no pour is specified, the latest pour w
 **`volume_poured`**: the volume poured 
 
 
-####*POST*
+####*GET*
 **`/v1/authenticate/<sso>/`**  
 Authenticate to the system as a specific user using the badge reader
 
@@ -73,7 +73,7 @@ Authenticate to the system as a specific user using the badge reader
 **`result`**: the success of authentication  
 **`id`**: the id of the user we authenticated as
 
-####*POST*
+####*GET*
 **`/v1/system_info/`**  
 Fetch system status information as JSON
 
@@ -131,7 +131,7 @@ Fetch the pour history
 **`result`**: the success of fetch  
 **`pours`**: a list of pours and their status, timestamp, user_id, full name and volume
 
-####*POST*
+####*GET*
 **`/v1/user_photo/<user_id>`**  
 Fetch the pour history
 
@@ -144,7 +144,7 @@ Fetch the pour history
 This returns no json, only an image
 
 
-####*POST*
+####*GET*
 **`/v1/user_info/<user_id>`**  
 Fetch the specified user information based upon id passed
 
@@ -167,7 +167,7 @@ Fetch the specified user information based upon id passed
 **`sso`**: the sso of the user
 
 
-####*POST*
+####*GET*
 **`/v1/dt/overview/`**  
 Fetch the Digital Twin information as JSON
 
@@ -186,7 +186,7 @@ Fetch the Digital Twin information as JSON
 **`days_in_c02`**: the number of days remaining until we need to replace the c02
 
 
-####*POST*
+####*GET*
 **`/v1/dt/omt/`**  
 Fetch the Digital Twin information as JSON
 
