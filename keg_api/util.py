@@ -1,7 +1,13 @@
 __author__ = 'andrewsmiley'
 from models import *
-from grovepi import *
-import RPi.GPIO as GPIO
+try:
+    from grovepi import *
+    import RPi.GPIO as GPIO
+except:
+    print "Running in local environment: Using Stubs"
+    from grovepi import *
+    import GPIO
+
 import math
 # from multiprocessing import Process
 import threading
