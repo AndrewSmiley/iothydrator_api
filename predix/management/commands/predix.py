@@ -62,15 +62,26 @@ class Command(BaseCommand):
         # print ('starting websocket stuff')
 
         # myHeader = {'Authorization': 'Bearer %s' % token, 'Predix-Zone-id': "%s" % settings.ingest_zone, 'Content-Type':'application/json'}
-
+        import urllib
         while True:
+
             timestamp = int((datetime.utcnow() - datetime(1970, 1, 1)).total_seconds() * 1000)
             data_points = self.create_data_entries()
+            # https://iot-hydrator-timeseries-service.run.aws-usw02-pr.ice.predix.io/
             for dp in data_points:
-                r = requests.get("https://iot-hydrator-timeseries-service.run.aws-usw02-pr.ice.predix.io/")
-            new_data = {"messageId": "mid%s"%str(timestamp), 'body':data_points}
-            print json.dumps(new_data)
-            break
+                url = "%sservices/iothydrator/add_datapoint/%s/%s/%s/%s/%s/"%\
+                      ("https://iot-hydrator-timeseries-service.run.aws-usw02-pr.ice.predix.io/", int(dp['datapoints'][0][0]), int(dp['datapoints'][0][1]), int(dp['datapoints'][0][1]), dp['name'], urllib.quote(json.dumps(dp['attributes']), safe=''))
+                # url = urllib.quote(url, safe='')
+                # os.system("echo $HTTP_PROXY")
+                r=requests.get(url)
+                print r.status_code
+
+                # /services/iothydrator/add_datapoint/{timestamp}/{measure}/{quality}/{name}/{attributes}
+                # r = requests.get("https://iot-hydrator-timeseries-service.run.aws-usw02-pr.ice.predix.io/")
+            # new_data = {"messageId": "mid%s"%str(timestamp), 'body':data_points}
+            # print json.dumps(new_data)
+            print "taking a little snooze"
+            time.sleep(60*15) #15 minute snooze
             # ws = websocket.WebSocket()
             # ws.connect(settings.ingest_wss, header=myHeader)
 
@@ -98,8 +109,9 @@ class Command(BaseCommand):
     def fetch_temp_data(self):
         settings = self.load_sensor_settings()
         sensor= 0
-        datapoints = []
+
         for entry in settings.dht_sensors:
+            datapoints = []
             datapoint = {"name":"dht", "attributes":{"sensor":sensor}}
             timestamp = int((datetime.utcnow() - datetime(1970, 1, 1)).total_seconds() * 1000)
             try:
@@ -111,7 +123,7 @@ class Command(BaseCommand):
                 datapoint['datapoints']=[t,h]
             except:
                 #1 is uncertain quality
-                datapoint['datapoints']=[[[timestamp,0,1],[timestamp, 0,1]]]
+                datapoint['datapoints']=[[timestamp,0,1],[timestamp, 0,1]]
             datapoints.append(datapoint)
 
         # print "Fetched temperator data %s" %datapoints
@@ -121,9 +133,9 @@ class Command(BaseCommand):
         datapoints = []
 
         for pour in Pour.objects.all():
-            timestamp = int((datetime.utcnow() - datetime(1970, 1, 1)).total_seconds() * 1000)
+            # timestamp = int((datetime.utcnow() - datetime(1970, 1, 1)).total_seconds() * 1000)
             datapoint = {"name":"pour", "datapoints":[], "attributes":{"user":pour.user.sso, "status":pour.status.description}}
-            datapoint['datapoints'].append([timestamp, pour.volume, 3])
+            datapoint['datapoints'].append([int(float(pour.date)), pour.volume, 3])
             datapoints.append(datapoint)
             pour.predix_status=True
             pour.save()
