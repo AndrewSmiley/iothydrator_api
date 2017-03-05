@@ -48,7 +48,7 @@ def authenticate(request, sso=''):
 def system_info(request):
     health ={}
     health['sensors'] = {"flowmeter":get_flowmeter_status(), "pressure_sensor": get_pressure_sensor_status(), "thermo":get_thermo_status()}
-    health["keg"]= {'temperature': get_keg_temperature(), 'percentage': get_keg_percentage()}
+    health["keg"]= {'temperature': 34, 'percentage': 80}
     health['c02']={'percentage': get_c02_percentage()}
 
     return HttpResponse(json.dumps({"result":True,"health":health}))
