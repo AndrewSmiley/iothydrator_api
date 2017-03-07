@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a060fb34-cfef-4cdc-854d-095bdd1edc80" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/storage.db" afterPath="$PROJECT_DIR$/storage.db" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/keg_api/GPIO.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/keg_api/grovepi.py" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/storage.db" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keg_api/predix.py" afterPath="$PROJECT_DIR$/keg_api/predix.py" />
