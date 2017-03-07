@@ -1,8 +1,10 @@
 __author__ = 'pridemai'
 from django.shortcuts import render, render_to_response
 from django.http.response import HttpResponse
+
 from models import Pour, User, Status
 from util import *
+from predix import *
 # import Image
 import json
 import datetime
@@ -48,7 +50,7 @@ def authenticate(request, sso=''):
 def system_info(request):
     health ={}
     health['sensors'] = {"flowmeter":get_flowmeter_status(), "pressure_sensor": get_pressure_sensor_status(), "thermo":get_thermo_status()}
-    health["keg"]= {'temperature': 34, 'percentage': 80}
+    health["keg"]= {'temperature': 34, 'percentage': get_keg_percentage()}
     health['c02']={'percentage': get_c02_percentage()}
 
     return HttpResponse(json.dumps({"result":True,"health":health}))
@@ -68,7 +70,8 @@ def user_photo(request, user_id=1):
     image_data = open("rumham.jpg", "rb").read()
     return HttpResponse(image_data, content_type="image/png")
 def dt_overview(request):
-    return HttpResponse(json.dumps({"result":"true","days_in_keg":get_days_to_keg_empty(), "days_in_c02":get_days_in_tank(), "days_in_lines":get_days_in_lines()}))
+
+    return HttpResponse(json.dumps({"result":"true","days_in_keg":predix_keg_empty(), "days_in_c02":get_days_in_tank(), "days_in_lines":get_days_in_lines(), "keg_percentage":43}))
 
 def dt_optimal_maintenance_time(request):
     omt_range= get_optimal_maintenance_range()

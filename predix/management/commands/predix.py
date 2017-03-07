@@ -7,7 +7,7 @@ import json, time
 from datetime import datetime
 from keg_api.models import Pour
 
-#from grovepi import *
+from keg_api.grovepi import *
 
 # "uaa_uri": "https://58c031e5-475a-436f-9205-3893c393a6a1.predix-uaa.run.aws-usw02-pr.ice.predix.io",
 # "uaa_client": "gecloud",
@@ -41,7 +41,8 @@ class Command(BaseCommand):
         return SensorSettings(**settings_json) #DOUBLE SPLAT!!
 
     def add_arguments(self, parser):
-        parser.add_argument('poll_id', nargs='+', type=int)
+        pass
+        # parser.add_argument('poll_id', nargs='+', type=int)
 
     def handle(self, *args, **options):
         settings = self.load_predix_settings()
@@ -50,32 +51,50 @@ class Command(BaseCommand):
         # ingestURL = 'wss://gateway-predix-data-services.run.aws-usw02-pr.ice.predix.io/v1/stream/messages'
         # ingestZone = '5423f397-d4eb-499e-ac6b-373b891de2b2'
 
-        headers={'Authorization':'Basic %s' %(base64.b64encode('%s:%s'%(settings.uaa_client, settings.uaa_password)))}
-
-        payload = {'client_id':settings.uaa_client,'response_type':'token','grant_type':'client_credentials'}
-        response = requests.post('%s/oauth/token'%(settings.uaa_uri),data=payload,headers=headers)
+        # headers={'Authorization':'Basic %s' %(base64.b64encode('%s:%s'%(settings.uaa_client, settings.uaa_password)))}
+        #
+        # payload = {'client_id':settings.uaa_client,'response_type':'token','grant_type':'client_credentials'}
+        # response = requests.post('%s/oauth/token'%(settings.uaa_uri),data=payload,headers=headers)
         # print response.content
-        response = response.json()
-        token = response['access_token']
+        # response = response.json()
+        # token = response['access_token']
 
         # print ('starting websocket stuff')
 
-        myHeader = {'Authorization': 'Bearer %s' % token, 'Predix-Zone-id': "%s" % settings.ingest_zone, 'Content-Type':'application/json'}
-
+        # myHeader = {'Authorization': 'Bearer %s' % token, 'Predix-Zone-id': "%s" % settings.ingest_zone, 'Content-Type':'application/json'}
+        import urllib
         while True:
-            ws = websocket.WebSocket()
-            ws.connect(settings.ingest_wss, header=myHeader)
+
             timestamp = int((datetime.utcnow() - datetime(1970, 1, 1)).total_seconds() * 1000)
             data_points = self.create_data_entries()
-            new_data = {"messageId": "mid%s"%str(timestamp), 'body':data_points}
-            print ("sending data %s\n at time %s\n to %s" %(new_data, timestamp, settings.ingest_zone))
-            ws.send(json.dumps(new_data))
-            print ws.recv()
+            # https://iot-hydrator-timeseries-service.run.aws-usw02-pr.ice.predix.io/
+            for dp in data_points:
+                url = "%sservices/iothydrator/add_datapoint/%s/%s/%s/%s/%s/"%\
+                      ("https://iot-hydrator-timeseries-service.run.aws-usw02-pr.ice.predix.io/", int(dp['datapoints'][0][0]), int(dp['datapoints'][0][1]), int(dp['datapoints'][0][1]), dp['name'], urllib.quote(json.dumps(dp['attributes']), safe=''))
+                # url = urllib.quote(url, safe='')
+                # os.system("echo $HTTP_PROXY")
+                r=requests.get(url)
+                print r.status_code
+
+                # /services/iothydrator/add_datapoint/{timestamp}/{measure}/{quality}/{name}/{attributes}
+                # r = requests.get("https://iot-hydrator-timeseries-service.run.aws-usw02-pr.ice.predix.io/")
+            # new_data = {"messageId": "mid%s"%str(timestamp), 'body':data_points}
+            # print json.dumps(new_data)
+            print "taking a little snooze"
             time.sleep(60*15) #15 minute snooze
+            # ws = websocket.WebSocket()
+            # ws.connect(settings.ingest_wss, header=myHeader)
 
-        ws.close()
+            # data_points = self.create_data_entries()
+            #
+            # print ("sending data %s\n at time %s\n to %s" %(new_data, timestamp, settings.ingest_zone))
+            # ws.send(json.dumps(new_data))
+            # print ws.recv()
+            # time.sleep(60*15) #15 minute snooze
+        #
+            # ws.close()
 
-        self.stdout.write("it worked! %s"%(os.getcwd()), ending='')
+        # self.stdout.write("it worked! %s"%(os.getcwd()), ending='')
 
 
     def create_data_entries(self):
@@ -90,8 +109,9 @@ class Command(BaseCommand):
     def fetch_temp_data(self):
         settings = self.load_sensor_settings()
         sensor= 0
-        datapoints = []
+
         for entry in settings.dht_sensors:
+            datapoints = []
             datapoint = {"name":"dht", "attributes":{"sensor":sensor}}
             timestamp = int((datetime.utcnow() - datetime(1970, 1, 1)).total_seconds() * 1000)
             try:
@@ -103,18 +123,19 @@ class Command(BaseCommand):
                 datapoint['datapoints']=[t,h]
             except:
                 #1 is uncertain quality
-                datapoint['datapoints']=[[[timestamp,0,1],[timestamp, 0,1]]]
+                datapoint['datapoints']=[[timestamp,0,1],[timestamp, 0,1]]
             datapoints.append(datapoint)
 
-        print "Fetched temperator data %s" %datapoints
+        # print "Fetched temperator data %s" %datapoints
         return datapoints
     #really all i want here is the volume of the pour
     def fetch_pour_history(self):
         datapoints = []
-        timestamp = int((datetime.utcnow() - datetime(1970, 1, 1)).total_seconds() * 1000)
-        for pour in Pour.objects.filter(predix_status=False):
-            datapoint = {"name":"pour", "datapoints":[], "attributes":{"user":pour.user.sso, "status":pour.status.description}}
-            datapoint['datapoints'].append([timestamp, pour.volume, 3])
+
+        for pour in Pour.objects.all():
+            # timestamp = int((datetime.utcnow() - datetime(1970, 1, 1)).total_seconds() * 1000)
+            datapoint = {"name":"pour", "datapoints":[], "attributes":{"user":pour.user.sso, "status":pour.status.description, "keg": pour.keg.id}}
+            datapoint['datapoints'].append([int(float(pour.date)), pour.volume, 3])
             datapoints.append(datapoint)
             pour.predix_status=True
             pour.save()

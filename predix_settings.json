@@ -1,8 +1,8 @@
 {
-  "uaa_uri": "https://23b8155d-f40c-4faf-8802-d31dd864a7d1.predix-uaa.run.aws-usw02-pr.ice.predix.io",
+  "uaa_uri": "https://ad8f3b3c-f45b-48bf-9c36-4678ac2ede37.predix-uaa.run.aws-usw02-pr.ice.predix.io",
   "uaa_client": "keg",
   "uaa_password":"gecloud",
   "ingest_wss": "wss://gateway-predix-data-services.run.aws-usw02-pr.ice.predix.io/v1/stream/messages",
-  "ingest_zone":"6d5bf730-0eaa-4785-a2b4-c3bfe710d93a",
+  "ingest_zone":"bc1f83f1-c489-4426-9341-f6bee917cb44",
   "query_uri":"https://time-series-store-predix.run.aws-usw02-pr.ice.predix.io/v1/datapoints"
 }
