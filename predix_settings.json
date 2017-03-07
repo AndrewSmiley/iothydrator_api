@@ -3,6 +3,6 @@
   "uaa_client": "keg",
   "uaa_password":"gecloud",
   "ingest_wss": "wss://gateway-predix-data-services.run.aws-usw02-pr.ice.predix.io/v1/stream/messages",
-  "ingest_zone":"64a2a762-a305-4a95-9d5d-052e8bb37276",
+  "ingest_zone":"bc1f83f1-c489-4426-9341-f6bee917cb44",
   "query_uri":"https://time-series-store-predix.run.aws-usw02-pr.ice.predix.io/v1/datapoints"
 }

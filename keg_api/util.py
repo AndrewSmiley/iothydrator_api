@@ -111,11 +111,11 @@ def get_pressure_sensor_status():
 def get_keg_percentage():
     total_volume = 0.0
     for p in Pour.objects.filter(keg=Keg.objects.last()):
-        total_volume = total_volume+float(p.actual_volume)
+        total_volume = total_volume+float(p.volume)
 
 
 
-    return (float(total_volume)/float(Keg.objects.last().volume))*100
+    return int((float(total_volume)/float(Keg.objects.last().volume*128))*100.00)
 
 def get_c02_percentage():
     return 80 #just going to stub this in

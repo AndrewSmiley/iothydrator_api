@@ -134,7 +134,7 @@ class Command(BaseCommand):
 
         for pour in Pour.objects.all():
             # timestamp = int((datetime.utcnow() - datetime(1970, 1, 1)).total_seconds() * 1000)
-            datapoint = {"name":"pour", "datapoints":[], "attributes":{"user":pour.user.sso, "status":pour.status.description}}
+            datapoint = {"name":"pour", "datapoints":[], "attributes":{"user":pour.user.sso, "status":pour.status.description, "keg": pour.keg.id}}
             datapoint['datapoints'].append([int(float(pour.date)), pour.volume, 3])
             datapoints.append(datapoint)
             pour.predix_status=True
