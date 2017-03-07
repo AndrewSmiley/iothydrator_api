@@ -1,3 +1,4 @@
 storage.db
 keg_api/GPIO.py
 keg_api/grovepi.py
+*.pyc
