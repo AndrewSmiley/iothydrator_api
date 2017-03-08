@@ -50,7 +50,7 @@ def authenticate(request, sso=''):
 def system_info(request):
     health ={}
     health['sensors'] = {"flowmeter":get_flowmeter_status(), "pressure_sensor": get_pressure_sensor_status(), "thermo":get_thermo_status()}
-    health["keg"]= {'temperature': 34, 'percentage': get_keg_percentage()}
+    health["keg"]= {'temperature': get_keg_temperature(), 'percentage': get_keg_percentage()}
     health['c02']={'percentage': get_c02_percentage()}
 
     return HttpResponse(json.dumps({"result":True,"health":health}))
@@ -74,5 +74,19 @@ def dt_overview(request):
     return HttpResponse(json.dumps({"result":"true","days_in_keg":predix_keg_empty(), "days_in_c02":get_days_in_tank(), "days_in_lines":get_days_in_lines(), "keg_percentage":43}))
 
 def dt_optimal_maintenance_time(request):
-    omt_range= get_optimal_maintenance_range()
-    return HttpResponse(json.dumps({"result":"true", "omt_start":omt_range[0], "omt_end":omt_range[-1]}))
+    omt_range= predix_omt()
+    if omt_range[0].hour <= 11:
+        start = "%sAM"%(omt_range[0].hour)
+    elif omt_range[0].hour > 12:
+        start = "%sPM"%(omt_range[0].hour-12)
+    else:
+        start = "%sPM"%(omt_range[0].hour)
+
+    if omt_range[-1].hour <= 11:
+        end = "%sAM"%(omt_range[-1].hour)
+    elif omt_range[-1].hour > 12:
+        end = "%sPM"%(omt_range[-1].hour-12)
+    else:
+        end = "%sPM"%(omt_range[-1].hour)
+    # start = "%s%s"%(omt_range[0].hour if omt_range[0].hour < 12 else)
+    return HttpResponse(json.dumps({"result":"true", "omt_start":start, "omt_end":end}))

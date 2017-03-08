@@ -102,7 +102,7 @@ def get_thermo_status():
 
 def get_keg_temperature():
     [temp, hum] = dht(dht_sensor_port, dht_sensor_type)
-    return float(temp * 9 / 5 + 32)
+    return int(float(temp * 9 / 5 + 32))
 
 def get_flowmeter_status():
     return True

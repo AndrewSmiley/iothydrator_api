@@ -45,3 +45,5 @@ class Pour(models.Model):
     keg = models.ForeignKey(Keg)
     def __str__(self):
         return str(self.id)
+
+

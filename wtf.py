@@ -61,33 +61,10 @@ void loop()
   }
 }
 """
-import time
-from grovepi import *
-SLOPE=-0.0071
-VCC = 4.98; # Measured voltage of Ardunio 5V line
-R_DIV = 3230.0; # Measured resistance of 3.3k resistor
-pinMode(2, "INPUT")
-while True:
-
-    fsrADC =analogRead(2)
-    print fsrADC
-    if fsrADC != 0:
-        fsrV = float(fsrADC * VCC / 1023.0)
-        print ("Voltage: %s V Verified" %(fsrV))
-        fsrR = (fsrV/1.0)*1000#float(R_DIV * (VCC / fsrV - 1.0))
-        print ("Resistance: %s ohms" %(fsrR))
-        fsrG = float(1.0 / fsrR)
-
-        if (fsrR <= 600):
-            force = (fsrG - 0.00075) / 0.0000032639
-            print("Force: %s g" %(force))
-        else:
-            force = fsrG / 0.0000032639*2#force = fsrG / 0.000000642857#  (fsrR/SLOPE)+60#fsrG / SLOPE#0.00000642857;
-            #force = force
-            print("Force: %s g" %(force))
-    else:
-        print "no pressure detected"
-
-
-
-    time.sleep(1)
+from collections import OrderedDict
+bucket = OrderedDict()
+for i in range(23, -1, -1):
+    bucket[i] = []
+for k,v in bucket.iteritems():
+    print k
+print bucket
