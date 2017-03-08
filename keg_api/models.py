@@ -47,3 +47,8 @@ class Pour(models.Model):
         return str(self.id)
 
 
+class Line(models.Model):
+    date = models.CharField(max_length=50, default=str((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds() * 1000))
+    lifespace = models.IntegerField(default=365)
+
+
