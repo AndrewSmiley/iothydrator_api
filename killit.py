@@ -8,6 +8,6 @@ button_pin = 4		#Port for Button
 pinMode(button_pin,"INPUT")		# Assign mode for Button as input
 GPIO.setup(18, GPIO.OUT)
 while True:
-    GPIO.output(18, GPIO.LOW)
+    GPIO.output(18, GPIO.HIGH)
 
 
